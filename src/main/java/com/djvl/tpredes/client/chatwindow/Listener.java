@@ -3,7 +3,7 @@ package com.djvl.tpredes.client.chatwindow;
 import com.djvl.tpredes.client.login.LoginController;
 import com.djvl.tpredes.messages.Message;
 import com.djvl.tpredes.messages.MessageType;
-import com.djvl.tpredes.messages.Status;
+import com.djvl.tpredes.server.UdpServer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +33,9 @@ public class Listener implements Runnable {
         this.port = port;
         Listener.username = username;
         this.controller = controller;
+
+        UdpServer.getThread().start();
+        UdpServer.getThread().suspend();
     }
 
     public void run() {
@@ -67,9 +70,6 @@ public class Listener implements Runnable {
                         case DISCONNECTED:
                             controller.setUserList(message);
                             break;
-                        case STATUS:
-                            controller.setUserList(message);
-                            break;
                     }
                 }
             }
@@ -83,17 +83,7 @@ public class Listener implements Runnable {
         Message createMessage = new Message();
         createMessage.setName(username);
         createMessage.setType(MessageType.USER);
-        createMessage.setStatus(Status.AWAY);
         createMessage.setMsg(msg);
-        oos.writeObject(createMessage);
-        oos.flush();
-    }
-
-    public static void sendStatusUpdate(Status status) throws IOException {
-        Message createMessage = new Message();
-        createMessage.setName(username);
-        createMessage.setType(MessageType.STATUS);
-        createMessage.setStatus(status);
         oos.writeObject(createMessage);
         oos.flush();
     }

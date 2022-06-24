@@ -3,6 +3,7 @@ package com.djvl.tpredes.messages;
 import java.io.Serializable;
 
 public class User implements Serializable {
+    String name;
 
     public String getName() {
         return name;
@@ -12,15 +13,5 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    String name;
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-    Status status;
 }
 

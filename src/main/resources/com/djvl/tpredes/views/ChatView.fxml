@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Point3D?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
@@ -16,40 +14,35 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import java.lang.String?>
+<?import javafx.scene.control.ToggleButton?>
+<?import io.github.palexdev.materialfx.controls.MFXToggleButton?>
 <BorderPane fx:id="borderPane" maxHeight="620.0" maxWidth="1040.0" prefHeight="620.0" prefWidth="1040.0"
             xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.djvl.tpredes.client.chatwindow.ChatController">
     <center>
         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-            <children>
-                <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308"
-                            maxWidth="1.7976931348623157E308" pannable="true" prefHeight="496.0" vbarPolicy="ALWAYS"
-                            vmin="1.0" vvalue="1.0" VBox.vgrow="ALWAYS">
-                    <content>
-                        <ListView fx:id="chatPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                                  prefHeight="200.0" prefWidth="200.0"/>
-                    </content>
-                </ScrollPane>
-                <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                      minWidth="100.0" VBox.vgrow="NEVER">
-                    <children>
-                        <TextArea fx:id="messageBox" maxHeight="1.7976931348623157E308"
-                                  maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="100.0"
-                                  nodeOrientation="LEFT_TO_RIGHT" onKeyPressed="#sendMethod" prefHeight="16.0"
-                                  prefWidth="698.0" promptText="Enter Message..." scaleShape="false"
-                                  HBox.hgrow="ALWAYS">
-                            <font>
-                                <Font name="SansSerif Regular" size="14.0"/>
-                            </font>
-                        </TextArea>
-                        <Button fx:id="buttonSend" alignment="CENTER" maxHeight="1.7976931348623157E308"
-                                maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-                                mnemonicParsing="false" onAction="#sendButtonAction" prefHeight="43.0" prefWidth="140.0"
-                                scaleShape="false" text="Send" textAlignment="CENTER" HBox.hgrow="NEVER"/>
-                    </children>
-                </HBox>
-            </children>
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308"
+                        maxWidth="1.7976931348623157E308" pannable="true" prefHeight="496.0" vbarPolicy="ALWAYS"
+                        vmin="1.0" vvalue="1.0" VBox.vgrow="ALWAYS">
+                <ListView fx:id="chatPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                          prefHeight="200.0" prefWidth="200.0"/>
+            </ScrollPane>
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                  minWidth="100.0" VBox.vgrow="NEVER">
+                <TextArea fx:id="messageBox" maxHeight="1.7976931348623157E308"
+                          maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="100.0"
+                          nodeOrientation="LEFT_TO_RIGHT" onKeyPressed="#sendMethod" prefHeight="16.0"
+                          prefWidth="698.0" promptText="Enter Message..." scaleShape="false"
+                          HBox.hgrow="ALWAYS">
+                    <font>
+                        <Font name="SansSerif Regular" size="14.0"/>
+                    </font>
+                </TextArea>
+                <Button fx:id="buttonSend" alignment="CENTER" maxHeight="1.7976931348623157E308"
+                        maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
+                        mnemonicParsing="false" onAction="#sendButtonAction" prefHeight="43.0" prefWidth="140.0"
+                        scaleShape="false" text="Send" textAlignment="CENTER" HBox.hgrow="NEVER"/>
+            </HBox>
         </VBox>
     </center>
     <left>
@@ -58,7 +51,7 @@
                 <HBox fx:id="onlineUsersHbox" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0"
                       prefWidth="217.0" stylesheets="@../styles/ListViewStyle.css">
                     <children>
-                        <Label prefHeight="50.0" prefWidth="124.0" text="Online Users:" textAlignment="CENTER"
+                        <Label prefHeight="50.0" prefWidth="124.0" text="Usuários online:" textAlignment="CENTER"
                                textFill="#fc6747">
                             <font>
                                 <Font name="SansSerif Regular" size="14.0"/>
@@ -91,82 +84,41 @@
         <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                     style="-fx-background-color: #031c30;" BorderPane.alignment="CENTER">
             <center>
-                <ImageView fitHeight="79.0" fitWidth="522.0" pickOnBounds="true" preserveRatio="true"
-                           BorderPane.alignment="CENTER">
-                    <image>
-                        <Image url="@../images/fxchat.png"/>
-                    </image>
-                    <BorderPane.margin>
-                        <Insets right="100.0"/>
-                    </BorderPane.margin>
-                </ImageView>
+                <MFXToggleButton textFill="white" selected="true" text="Mudo" onAction="#toggleMute">
+                    <HBox.margin>
+                        <Insets right="30.0" top="30.0" bottom="30.0"/>
+                    </HBox.margin>
+                </MFXToggleButton>
             </center>
             <right>
-                <HBox prefHeight="24.0" prefWidth="30.0" stylesheets="@../styles/ButtonStyle.css"
+                <HBox prefHeight="24.0" stylesheets="@../styles/ButtonStyle.css"
                       BorderPane.alignment="CENTER">
-                    <children>
-                        <ImageView fitHeight="23.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true"
-                                   styleClass="button">
-                            <image>
-                                <Image url="@../images/settings.png"/>
-                            </image>
-                            <HBox.margin>
-                                <Insets right="30.0" top="30.0"/>
-                            </HBox.margin>
-                            <cursor>
-                                <Cursor fx:constant="HAND"/>
-                            </cursor>
-                        </ImageView>
-                        <ImageView fitHeight="22.0" fitWidth="21.0" onMousePressed="#closeApplication"
-                                   pickOnBounds="true" preserveRatio="true" styleClass="button">
-                            <image>
-                                <Image url="@../images/close_normal.png"/>
-                            </image>
-                            <HBox.margin>
-                                <Insets right="30.0" top="30.0"/>
-                            </HBox.margin>
-                            <cursor>
-                                <Cursor fx:constant="HAND"/>
-                            </cursor>
-                        </ImageView>
-                    </children>
+                    <ImageView fitHeight="22.0" fitWidth="21.0" onMousePressed="#closeApplication"
+                               pickOnBounds="true" preserveRatio="true" styleClass="button">
+                        <Image url="@../images/close_normal.png"/>
+                        <HBox.margin>
+                            <Insets right="30.0" top="30.0" bottom="30.0"/>
+                        </HBox.margin>
+                        <cursor>
+                            <Cursor fx:constant="HAND"/>
+                        </cursor>
+                    </ImageView>
                 </HBox>
             </right>
             <left>
                 <HBox prefWidth="259.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <ImageView fx:id="userImageView" fitHeight="69.0" fitWidth="59.0" pickOnBounds="true"
-                                   preserveRatio="true">
-                            <image>
-                                <Image url="@../images/default.png"/>
-                            </image>
-                            <HBox.margin>
-                                <Insets left="10.0" top="10.0"/>
-                            </HBox.margin>
-                        </ImageView>
-                        <VBox>
-                            <HBox.margin>
-                                <Insets left="10.0" top="30.0"/>
-                            </HBox.margin>
-                            <children>
-                                <Label fx:id="usernameLabel" text="Dominic Heal" textFill="#fa6648">
-                                    <font>
-                                        <Font name="HelveticaNeue Medium" size="14.0"/>
-                                    </font>
-                                </Label>
-                                <ComboBox fx:id="statusComboBox" prefHeight="25.0" prefWidth="101.0" promptText="Online"
-                                          stylesheets="@../styles/ComboBox.css">
-                                    <items>
-                                        <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="Online"/>
-                                            <String fx:value="Away"/>
-                                            <String fx:value="Busy"/>
-                                        </FXCollections>
-                                    </items>
-                                </ComboBox>
-                            </children>
-                        </VBox>
-                    </children>
+                    <VBox>
+                        <HBox.margin>
+                            <Insets left="10.0" top="30.0"/>
+                        </HBox.margin>
+                        <children>
+                            <Label fx:id="usernameLabel" text="Dominic Heal" textFill="#fa6648">
+                                <font>
+                                    <Font name="HelveticaNeue Medium" size="14.0"/>
+                                </font>
+                            </Label>
+                        </children>
+                    </VBox>
                 </HBox>
             </left>
         </BorderPane>

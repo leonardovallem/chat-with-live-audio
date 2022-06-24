@@ -1,6 +1,6 @@
 #CloseBtn {
     -fx-graphic: url("../images/cross.png");
-    -fx-background-color:transparent;
+    -fx-background-color: transparent;
     -fx-opacity: 1;
 }
 
@@ -25,7 +25,7 @@
 #connectBtn{
     -fx-color: #ffffff;
     -fx-padding: 5px 20px;
-    -fx-background-color: linear-gradient(to bottom, #ffe49e 0%,#ffb700 3%,#ffad00 35%,#ff9000 97%,#e27f00 100%);
+    -fx-background-color: #911ad6;
     -fx-font-family: 'Open Sans', sans-serif;
     -fx-font-size: 12px;
     border-radius: 3px;

@@ -2,15 +2,16 @@ package com.djvl.tpredes.client.chatwindow;
 
 import com.djvl.tpredes.ChatApplication;
 import com.djvl.tpredes.messages.Message;
-import com.djvl.tpredes.messages.Status;
 import com.djvl.tpredes.messages.User;
 import com.djvl.tpredes.messages.bubble.BubbleSpec;
 import com.djvl.tpredes.messages.bubble.BubbledLabel;
+import com.djvl.tpredes.server.UdpServer;
+import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,8 +19,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -52,13 +51,11 @@ public class ChatController implements Initializable {
     @FXML
     private ListView userList;
     @FXML
-    private ImageView userImageView;
-    @FXML
     ListView chatPane;
     @FXML
     BorderPane borderPane;
     @FXML
-    ComboBox statusComboBox;
+    boolean isMuted = true;
 
     private double xOffset;
     private double yOffset;
@@ -72,20 +69,15 @@ public class ChatController implements Initializable {
     }
 
     public synchronized void addToChat(Message msg) {
-        Task<HBox> othersMessages = new Task<HBox>() {
+        Task<HBox> othersMessages = new Task<>() {
             @Override
-            public HBox call() throws Exception {
-                URI uri = new File("src/main/resources/com/djvl/tpredes/images/" + msg.getPicture().toLowerCase() + ".png").toURI();
-                Image image = new Image(uri.toURL().toString());
-                ImageView profileImage = new ImageView(image);
-                profileImage.setFitHeight(32);
-                profileImage.setFitWidth(32);
+            public HBox call() {
                 BubbledLabel bl6 = new BubbledLabel();
                 bl6.setText(msg.getName() + ": " + msg.getMsg());
                 bl6.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
                 HBox x = new HBox();
                 bl6.setBubbleSpec(BubbleSpec.FACE_LEFT_CENTER);
-                x.getChildren().addAll(profileImage, bl6);
+                x.getChildren().add(bl6);
                 setOnlineLabel(Integer.toString(msg.getOnlineCount()));
                 return x;
             }
@@ -95,14 +87,9 @@ public class ChatController implements Initializable {
             chatPane.getItems().add(othersMessages.getValue());
         });
 
-        Task<HBox> yourMessages = new Task<HBox>() {
+        Task<HBox> yourMessages = new Task<>() {
             @Override
-            public HBox call() throws Exception {
-                Image image = userImageView.getImage();
-                ImageView profileImage = new ImageView(image);
-                profileImage.setFitHeight(32);
-                profileImage.setFitWidth(32);
-
+            public HBox call() {
                 BubbledLabel bl6 = new BubbledLabel();
                 bl6.setText(msg.getMsg());
                 bl6.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
@@ -110,13 +97,15 @@ public class ChatController implements Initializable {
                 x.setMaxWidth(chatPane.getWidth() - 20);
                 x.setAlignment(Pos.TOP_RIGHT);
                 bl6.setBubbleSpec(BubbleSpec.FACE_RIGHT_CENTER);
-                x.getChildren().addAll(bl6, profileImage);
+                x.getChildren().add(bl6);
 
                 setOnlineLabel(Integer.toString(msg.getOnlineCount()));
                 return x;
             }
         };
-        yourMessages.setOnSucceeded(event -> chatPane.getItems().add(yourMessages.getValue()));
+        yourMessages.setOnSucceeded(event -> {
+            chatPane.getItems().add(yourMessages.getValue());
+        });
 
         if (msg.getName().equals(usernameLabel.getText())) {
             Thread t2 = new Thread(yourMessages);
@@ -153,12 +142,18 @@ public class ChatController implements Initializable {
     }
 
     @FXML
+    public void toggleMute(ActionEvent ae) {
+        isMuted = ((MFXToggleButton) ae.getSource()).isSelected();
+        if (isMuted) UdpServer.getThread().suspend();
+        else UdpServer.getThread().resume();
+    }
+
+    @FXML
     public void closeApplication() {
         Platform.exit();
         System.exit(0);
     }
 
-    /* Method to display server messages */
     public synchronized void addAsServer(Message msg) {
         Task<HBox> task = new Task<HBox>() {
             @Override
@@ -184,7 +179,6 @@ public class ChatController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        /* Drag and Drop */
         borderPane.setOnMousePressed(event -> {
             xOffset = ChatApplication.getPrimaryStage().getX() - event.getScreenX();
             yOffset = ChatApplication.getPrimaryStage().getY() - event.getScreenY();
@@ -200,15 +194,6 @@ public class ChatController implements Initializable {
             borderPane.setCursor(Cursor.DEFAULT);
         });
 
-        statusComboBox.getSelectionModel().selectedItemProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
-            try {
-                Listener.sendStatusUpdate(Status.valueOf(newValue.toUpperCase()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        /* Added to prevent the enter from adding a new line to inputMessageBox */
         messageBox.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
             if (ke.getCode().equals(KeyCode.ENTER)) {
                 try {

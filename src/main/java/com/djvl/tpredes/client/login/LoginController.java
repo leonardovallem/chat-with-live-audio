@@ -4,9 +4,6 @@ import com.djvl.tpredes.ChatApplication;
 import com.djvl.tpredes.client.chatwindow.ChatController;
 import com.djvl.tpredes.client.chatwindow.Listener;
 import com.djvl.tpredes.client.util.ResizeHelper;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,21 +12,16 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
